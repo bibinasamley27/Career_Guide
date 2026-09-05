@@ -1,0 +1,2 @@
+> git status -z -uall
+fatal: .git/index: index file smaller than expected

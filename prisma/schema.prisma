@@ -1,0 +1,402 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum SkillProficiency {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum SkillImportance {
+  REQUIRED
+  PREFERRED
+}
+
+enum ResourceType {
+  COURSE
+  DOCUMENTATION
+  TUTORIAL
+  BOOK
+  PRACTICE_PLATFORM
+  PROJECT_IDEA
+}
+
+enum ResourceLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  ALL_LEVELS
+}
+
+enum RoadmapStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  DONE
+}
+
+enum AgentRunStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
+// ==========================================
+// USER & PROFILE MODELS
+// ==========================================
+
+model User {
+  id           String         @id @default(uuid())
+  name         String
+  email        String         @unique
+  passwordHash String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  profile      Profile?
+  interests    UserInterest[]
+  skills       UserSkill[]
+  savedCareers SavedCareer[]
+  assessments  Assessment[]
+  roadmaps     Roadmap[]
+  progress     Progress[]
+  agentRuns    AgentRun[]
+
+  @@map("users")
+}
+
+model Profile {
+  id                  String   @id @default(uuid())
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name                String
+  education           String
+  degreeBranch        String?
+  experienceLevel     String
+  preferredDomains    String[]
+  careerGoal          String?  @db.Text
+  learningPreference  String?
+  weeklyLearningHours Int?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("profiles")
+}
+
+// ==========================================
+// INTERESTS & USER INTERESTS
+// ==========================================
+
+model Interest {
+  id              String           @id @default(uuid())
+  name            String           @unique
+  category        String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  userInterests   UserInterest[]
+  careerInterests CareerInterest[]
+
+  @@map("interests")
+}
+
+model UserInterest {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  interestId String
+  interest   Interest @relation(fields: [interestId], references: [id], onDelete: Cascade)
+  weight     Int      @default(3)
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, interestId])
+  @@index([userId])
+  @@index([interestId])
+  @@map("user_interests")
+}
+
+// ==========================================
+// SKILLS & USER SKILLS
+// ==========================================
+
+model Skill {
+  id            String         @id @default(uuid())
+  name          String         @unique
+  category      String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  userSkills    UserSkill[]
+  careerSkills  CareerSkill[]
+  roadmapSkills RoadmapSkill[]
+
+  @@map("skills")
+}
+
+model UserSkill {
+  id          String           @id @default(uuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skillId     String
+  skill       Skill            @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  proficiency SkillProficiency
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@unique([userId, skillId])
+  @@index([userId])
+  @@index([skillId])
+  @@map("user_skills")
+}
+
+// ==========================================
+// CAREERS & RELATIONSHIPS
+// ==========================================
+
+model Career {
+  id                     String                  @id @default(uuid())
+  title                  String                  @unique
+  description            String                  @db.Text
+  domain                 String
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+
+  careerSkills           CareerSkill[]
+  careerInterests        CareerInterest[]
+  careerResources        CareerResource[]
+  roadmaps               Roadmap[]
+  savedCareers           SavedCareer[]
+  projectRecommendations ProjectRecommendation[]
+
+  @@index([domain])
+  @@map("careers")
+}
+
+model CareerSkill {
+  id             String           @id @default(uuid())
+  careerId       String
+  career         Career           @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  skillId        String
+  skill          Skill            @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  importance     SkillImportance  @default(REQUIRED)
+  minProficiency SkillProficiency @default(BEGINNER)
+  createdAt      DateTime         @default(now())
+
+  @@unique([careerId, skillId])
+  @@index([careerId])
+  @@index([skillId])
+  @@map("career_skills")
+}
+
+model CareerInterest {
+  id         String   @id @default(uuid())
+  careerId   String
+  career     Career   @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  interestId String
+  interest   Interest @relation(fields: [interestId], references: [id], onDelete: Cascade)
+  weight     Float    @default(1.0)
+  createdAt  DateTime @default(now())
+
+  @@unique([careerId, interestId])
+  @@index([careerId])
+  @@index([interestId])
+  @@map("career_interests")
+}
+
+// ==========================================
+// LEARNING RESOURCES & CAREER RESOURCES
+// ==========================================
+
+model Resource {
+  id              String           @id @default(uuid())
+  title           String
+  type            ResourceType
+  url             String?
+  provider        String
+  level           ResourceLevel    @default(ALL_LEVELS)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  careerResources CareerResource[]
+
+  @@map("resources")
+}
+
+model CareerResource {
+  id         String   @id @default(uuid())
+  careerId   String
+  career     Career   @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  resourceId String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  relevance  String?
+  createdAt  DateTime @default(now())
+
+  @@unique([careerId, resourceId])
+  @@index([careerId])
+  @@index([resourceId])
+  @@map("career_resources")
+}
+
+// ==========================================
+// ROADMAPS, STAGES & ROADMAP SKILLS
+// ==========================================
+
+model Roadmap {
+  id        String         @id @default(uuid())
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  careerId  String
+  career    Career         @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  status    RoadmapStatus  @default(DRAFT)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  stages    RoadmapStage[]
+
+  @@index([userId])
+  @@index([careerId])
+  @@map("roadmaps")
+}
+
+model RoadmapStage {
+  id                     String                  @id @default(uuid())
+  roadmapId              String
+  roadmap                Roadmap                 @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+  order                  Int
+  title                  String
+  duration               String
+  objectives             String[]
+  completionCriteria     String?                 @db.Text
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+
+  skills                 RoadmapSkill[]
+  projectRecommendations ProjectRecommendation[]
+  progress               Progress[]
+
+  @@index([roadmapId])
+  @@map("roadmap_stages")
+}
+
+model RoadmapSkill {
+  id             String       @id @default(uuid())
+  roadmapStageId String
+  stage          RoadmapStage @relation(fields: [roadmapStageId], references: [id], onDelete: Cascade)
+  skillId        String
+  skill          Skill        @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+
+  @@unique([roadmapStageId, skillId])
+  @@index([roadmapStageId])
+  @@index([skillId])
+  @@map("roadmap_skills")
+}
+
+// ==========================================
+// PROJECTS, SAVED CAREERS & ASSESSMENTS
+// ==========================================
+
+model ProjectRecommendation {
+  id             String           @id @default(uuid())
+  careerId       String?
+  career         Career?          @relation(fields: [careerId], references: [id], onDelete: SetNull)
+  roadmapStageId String?
+  roadmapStage   RoadmapStage?    @relation(fields: [roadmapStageId], references: [id], onDelete: SetNull)
+  title          String
+  description    String           @db.Text
+  difficulty     SkillProficiency @default(BEGINNER)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([careerId])
+  @@index([roadmapStageId])
+  @@map("project_recommendations")
+}
+
+model SavedCareer {
+  id       String   @id @default(uuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  careerId String
+  career   Career   @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  savedAt  DateTime @default(now())
+  notes    String?  @db.Text
+
+  @@unique([userId, careerId])
+  @@index([userId])
+  @@index([careerId])
+  @@map("saved_careers")
+}
+
+model Assessment {
+  id                String   @id @default(uuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  submittedAt       DateTime @default(now())
+  interestsSnapshot Json
+  skillsSnapshot    Json
+  profileSnapshot   Json
+  createdAt         DateTime @default(now())
+
+  @@index([userId])
+  @@map("assessments")
+}
+
+model Progress {
+  id             String         @id @default(uuid())
+  userId         String
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roadmapStageId String
+  roadmapStage   RoadmapStage   @relation(fields: [roadmapStageId], references: [id], onDelete: Cascade)
+  status         ProgressStatus @default(NOT_STARTED)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@unique([userId, roadmapStageId])
+  @@index([userId])
+  @@index([roadmapStageId])
+  @@map("progress")
+}
+
+// ==========================================
+// AGENT EXECUTION METADATA
+// ==========================================
+
+model AgentRun {
+  id                   String         @id @default(uuid())
+  userId               String
+  user                 User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal                 String
+  status               AgentRunStatus @default(PENDING)
+  selectedCapabilities String[]
+  toolExecutionLog     Json?
+  startedAt            DateTime       @default(now())
+  finishedAt           DateTime?
+  errorMessage         String?
+  resultSummary        String?        @db.Text
+  resultRefId          String?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("agent_runs")
+}
+
