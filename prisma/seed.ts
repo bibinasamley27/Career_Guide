@@ -193,6 +193,65 @@ async function main() {
         });
     resourceMap.set(resource.title, resource.id);
   }
+
+  const expandedResources: {
+    title: string;
+    type: ResourceType;
+    url: string;
+    provider: string;
+    level: ResourceLevel;
+    skills: string[];
+  }[] = [
+    { title: 'TypeScript Handbook', type: ResourceType.DOCUMENTATION, url: 'https://www.typescriptlang.org/docs/handbook/intro.html', provider: 'TypeScript Team', level: ResourceLevel.INTERMEDIATE, skills: ['TypeScript'] },
+    { title: 'JavaScript Guide', type: ResourceType.DOCUMENTATION, url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide', provider: 'Mozilla MDN', level: ResourceLevel.BEGINNER, skills: ['JavaScript'] },
+    { title: 'HTML and CSS Guides', type: ResourceType.DOCUMENTATION, url: 'https://developer.mozilla.org/en-US/docs/Learn', provider: 'Mozilla MDN', level: ResourceLevel.BEGINNER, skills: ['HTML/CSS'] },
+    { title: 'Next.js Learn', type: ResourceType.COURSE, url: 'https://nextjs.org/learn', provider: 'Vercel', level: ResourceLevel.INTERMEDIATE, skills: ['Next.js', 'React'] },
+    { title: 'Tailwind CSS Documentation', type: ResourceType.DOCUMENTATION, url: 'https://tailwindcss.com/docs', provider: 'Tailwind Labs', level: ResourceLevel.INTERMEDIATE, skills: ['Tailwind CSS'] },
+    { title: 'Node.js Learn', type: ResourceType.TUTORIAL, url: 'https://nodejs.org/en/learn', provider: 'Node.js', level: ResourceLevel.INTERMEDIATE, skills: ['Node.js', 'REST APIs'] },
+    { title: 'Express Web Framework Guide', type: ResourceType.DOCUMENTATION, url: 'https://expressjs.com/en/starter/installing.html', provider: 'Express.js', level: ResourceLevel.INTERMEDIATE, skills: ['Express.js', 'REST APIs'] },
+    { title: 'MongoDB University Learning Paths', type: ResourceType.COURSE, url: 'https://learn.mongodb.com/', provider: 'MongoDB', level: ResourceLevel.INTERMEDIATE, skills: ['MongoDB'] },
+    { title: 'Redis Documentation', type: ResourceType.DOCUMENTATION, url: 'https://redis.io/docs/latest/', provider: 'Redis', level: ResourceLevel.INTERMEDIATE, skills: ['Redis'] },
+    { title: 'Pandas User Guide', type: ResourceType.DOCUMENTATION, url: 'https://pandas.pydata.org/docs/user_guide/index.html', provider: 'Pandas Project', level: ResourceLevel.INTERMEDIATE, skills: ['Pandas', 'Python'] },
+    { title: 'NumPy User Guide', type: ResourceType.DOCUMENTATION, url: 'https://numpy.org/doc/stable/user/', provider: 'NumPy Project', level: ResourceLevel.INTERMEDIATE, skills: ['NumPy', 'Python'] },
+    { title: 'PyTorch Tutorials', type: ResourceType.TUTORIAL, url: 'https://pytorch.org/tutorials/', provider: 'PyTorch', level: ResourceLevel.INTERMEDIATE, skills: ['PyTorch', 'Python'] },
+    { title: 'Statsmodels Documentation', type: ResourceType.DOCUMENTATION, url: 'https://www.statsmodels.org/stable/index.html', provider: 'Statsmodels Project', level: ResourceLevel.ADVANCED, skills: ['Statistical Modeling', 'Python'] },
+    { title: 'Hugging Face LLM Course', type: ResourceType.COURSE, url: 'https://huggingface.co/learn/llm-course/chapter1/1', provider: 'Hugging Face', level: ResourceLevel.INTERMEDIATE, skills: ['Large Language Models', 'Python'] },
+    { title: 'Gemini Prompt Design Strategies', type: ResourceType.DOCUMENTATION, url: 'https://ai.google.dev/gemini-api/docs/prompting-strategies', provider: 'Google AI', level: ResourceLevel.INTERMEDIATE, skills: ['Prompt Engineering', 'Large Language Models'] },
+    { title: 'LangChain Retrieval Documentation', type: ResourceType.DOCUMENTATION, url: 'https://python.langchain.com/docs/concepts/retrieval/', provider: 'LangChain', level: ResourceLevel.INTERMEDIATE, skills: ['RAG Systems', 'Large Language Models', 'Python'] },
+    { title: 'Pinecone Learn: Vector Search', type: ResourceType.TUTORIAL, url: 'https://www.pinecone.io/learn/vector-search/', provider: 'Pinecone', level: ResourceLevel.INTERMEDIATE, skills: ['Vector Databases', 'RAG Systems'] },
+    { title: 'Kubernetes Documentation', type: ResourceType.DOCUMENTATION, url: 'https://kubernetes.io/docs/home/', provider: 'Kubernetes', level: ResourceLevel.ADVANCED, skills: ['Kubernetes', 'Docker'] },
+    { title: 'Linux Command Line Basics', type: ResourceType.TUTORIAL, url: 'https://ubuntu.com/tutorials/command-line-for-beginners', provider: 'Ubuntu', level: ResourceLevel.BEGINNER, skills: ['Linux'] },
+    { title: 'AWS Well-Architected Framework', type: ResourceType.DOCUMENTATION, url: 'https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html', provider: 'Amazon Web Services', level: ResourceLevel.ADVANCED, skills: ['AWS', 'Linux'] },
+    { title: 'GitHub Actions Documentation', type: ResourceType.DOCUMENTATION, url: 'https://docs.github.com/en/actions', provider: 'GitHub', level: ResourceLevel.INTERMEDIATE, skills: ['CI/CD Pipelines', 'Git & GitHub'] },
+    { title: 'OWASP Web Security Testing Guide', type: ResourceType.DOCUMENTATION, url: 'https://owasp.org/www-project-web-security-testing-guide/', provider: 'OWASP Foundation', level: ResourceLevel.ADVANCED, skills: ['Web Security (OWASP)', 'Vulnerability Assessment'] },
+    { title: 'OWASP API Security Top 10', type: ResourceType.DOCUMENTATION, url: 'https://owasp.org/API-Security/', provider: 'OWASP Foundation', level: ResourceLevel.INTERMEDIATE, skills: ['Web Security (OWASP)', 'REST APIs'] },
+    { title: 'NIST Cybersecurity Framework', type: ResourceType.DOCUMENTATION, url: 'https://www.nist.gov/cyberframework', provider: 'NIST', level: ResourceLevel.ADVANCED, skills: ['Network Security', 'Vulnerability Assessment'] },
+    { title: 'Figma Learn Design', type: ResourceType.COURSE, url: 'https://help.figma.com/hc/en-us/categories/360002051613', provider: 'Figma', level: ResourceLevel.BEGINNER, skills: ['Figma', 'UI Wireframing & Prototyping'] },
+    { title: 'Material Design Foundations', type: ResourceType.DOCUMENTATION, url: 'https://m3.material.io/foundations', provider: 'Material Design', level: ResourceLevel.INTERMEDIATE, skills: ['Design Systems'] },
+    { title: 'Nielsen Norman Group UX Research Articles', type: ResourceType.DOCUMENTATION, url: 'https://www.nngroup.com/articles/', provider: 'Nielsen Norman Group', level: ResourceLevel.INTERMEDIATE, skills: ['User Research', 'UI Wireframing & Prototyping'] },
+    { title: 'Atlassian User Stories Guide', type: ResourceType.TUTORIAL, url: 'https://www.atlassian.com/agile/project-management/user-stories', provider: 'Atlassian', level: ResourceLevel.BEGINNER, skills: ['Requirements Gathering & User Stories', 'Agile & Scrum Methodologies'] },
+    { title: 'Scrum Guide', type: ResourceType.BOOK, url: 'https://scrumguides.org/scrum-guide.html', provider: 'Scrum Guides', level: ResourceLevel.ALL_LEVELS, skills: ['Agile & Scrum Methodologies'] },
+    { title: 'AWS Architecture Center', type: ResourceType.DOCUMENTATION, url: 'https://aws.amazon.com/architecture/', provider: 'Amazon Web Services', level: ResourceLevel.INTERMEDIATE, skills: ['AWS', 'Docker'] },
+    { title: 'MITRE ATT&CK Knowledge Base', type: ResourceType.DOCUMENTATION, url: 'https://attack.mitre.org/', provider: 'MITRE', level: ResourceLevel.ADVANCED, skills: ['Network Security', 'Vulnerability Assessment'] },
+    { title: 'CIS Critical Security Controls', type: ResourceType.DOCUMENTATION, url: 'https://www.cisecurity.org/controls', provider: 'Center for Internet Security', level: ResourceLevel.ADVANCED, skills: ['Network Security', 'Cryptography Fundamentals'] },
+    { title: 'Web Content Accessibility Guidelines', type: ResourceType.DOCUMENTATION, url: 'https://www.w3.org/WAI/standards-guidelines/wcag/', provider: 'W3C', level: ResourceLevel.INTERMEDIATE, skills: ['HTML/CSS', 'User Research'] },
+    { title: 'Figma Community Design Resources', type: ResourceType.PRACTICE_PLATFORM, url: 'https://www.figma.com/community', provider: 'Figma', level: ResourceLevel.BEGINNER, skills: ['Figma', 'Design Systems'] },
+    { title: 'Tableau Training and Tutorials', type: ResourceType.COURSE, url: 'https://www.tableau.com/learn/training', provider: 'Tableau', level: ResourceLevel.BEGINNER, skills: ['Data Visualization'] },
+    { title: 'SQLBolt Interactive Lessons', type: ResourceType.PRACTICE_PLATFORM, url: 'https://sqlbolt.com/', provider: 'SQLBolt', level: ResourceLevel.BEGINNER, skills: ['SQL'] },
+    { title: 'Atlassian Jira Software Tutorials', type: ResourceType.TUTORIAL, url: 'https://www.atlassian.com/software/jira/guides', provider: 'Atlassian', level: ResourceLevel.BEGINNER, skills: ['Agile & Scrum Methodologies', 'Requirements Gathering & User Stories'] },
+    { title: 'Atlassian Product Discovery Guide', type: ResourceType.DOCUMENTATION, url: 'https://www.atlassian.com/software/product-discovery/guides', provider: 'Atlassian', level: ResourceLevel.INTERMEDIATE, skills: ['Requirements Gathering & User Stories', 'Agile & Scrum Methodologies'] },
+  ];
+  for (const item of expandedResources) {
+    const existing = await prisma.resource.findFirst({ where: { title: item.title } });
+    const resource = existing
+      ? await prisma.resource.update({ where: { id: existing.id }, data: { type: item.type, url: item.url, provider: item.provider, level: item.level } })
+      : await prisma.resource.create({ data: { title: item.title, type: item.type, url: item.url, provider: item.provider, level: item.level } });
+    resourceMap.set(resource.title, resource.id);
+    for (const skillName of item.skills) {
+      const skillId = skillMap.get(skillName);
+      if (skillId) await prisma.resourceSkill.upsert({ where: { resourceId_skillId: { resourceId: resource.id, skillId } }, update: {}, create: { resourceId: resource.id, skillId } });
+    }
+  }
   console.log(`✅ Seeded ${resourceMap.size} learning resources.`);
 
   // ==========================================
@@ -693,6 +752,68 @@ async function main() {
     }
 
     console.log(`  ✓ Seeded career: ${career.title}`);
+  }
+
+  const existingResourceSkills: Record<string, string[]> = {
+    'MDN Web Docs: Web Development Tutorials': ['JavaScript', 'HTML/CSS'],
+    'React Official Documentation': ['React', 'JavaScript'],
+    'The Python Official Tutorial': ['Python'],
+    'PostgreSQL Official Documentation': ['PostgreSQL', 'SQL'],
+    'Docker Official Getting Started Guide': ['Docker'],
+    'OWASP Top 10 Web Application Security Risks': ['Web Security (OWASP)', 'Vulnerability Assessment'],
+    'freeCodeCamp Responsive Web Design Certification': ['HTML/CSS', 'JavaScript'],
+    'Scikit-learn User Guide and Machine Learning in Python': ['Scikit-Learn', 'Python', 'Statistical Modeling'],
+    'Pro Git Book & Official Documentation': ['Git & GitHub'],
+  };
+  for (const [resourceTitle, skillNames] of Object.entries(existingResourceSkills)) {
+    const resourceId = resourceMap.get(resourceTitle);
+    if (!resourceId) continue;
+    for (const skillName of skillNames) {
+      const skillId = skillMap.get(skillName);
+      if (skillId) await prisma.resourceSkill.upsert({ where: { resourceId_skillId: { resourceId, skillId } }, update: {}, create: { resourceId, skillId } });
+    }
+  }
+
+  const seededCareers = await prisma.career.findMany({ include: { careerSkills: { include: { skill: true } }, careerResources: true, projectRecommendations: true } });
+  for (const career of seededCareers) {
+    const careerSkillIds = career.careerSkills.map((item) => item.skillId);
+    const relevantResources = await prisma.resource.findMany({ where: { skills: { some: { skillId: { in: careerSkillIds } } } }, include: { skills: true } });
+    for (const resource of relevantResources) {
+      const alreadyLinked = career.careerResources.some((mapping) => mapping.resourceId === resource.id);
+      if (!alreadyLinked) await prisma.careerResource.create({ data: { careerId: career.id, resourceId: resource.id, relevance: 'Supports a canonical skill in this career path.' } });
+    }
+
+    const skillNames = career.careerSkills.map((item) => item.skill.name);
+    for (const project of career.projectRecommendations) {
+      const inferred = skillNames.filter((skill) => `${project.title} ${project.description}`.toLowerCase().includes(skill.toLowerCase().split(/[^a-z0-9]+/i)[0]));
+      const selected = (inferred.length ? inferred : skillNames).slice(0, 3);
+      for (const skillName of selected) {
+        const skillId = skillMap.get(skillName);
+        if (skillId) await prisma.projectSkill.upsert({ where: { projectId_skillId: { projectId: project.id, skillId } }, update: {}, create: { projectId: project.id, skillId } });
+      }
+    }
+
+    const existingTitles = new Set(career.projectRecommendations.map((project) => project.title));
+    const projectTemplates = [
+      ['Skill Foundations Lab', SkillProficiency.BEGINNER],
+      ['Data and Validation Workflow', SkillProficiency.BEGINNER],
+      ['Applied Integration Prototype', SkillProficiency.INTERMEDIATE],
+      ['Production-Ready Service', SkillProficiency.INTERMEDIATE],
+      ['Monitoring and Quality Dashboard', SkillProficiency.INTERMEDIATE],
+      ['Scalable Portfolio System', SkillProficiency.ADVANCED],
+      ['Capstone Architecture Study', SkillProficiency.ADVANCED],
+    ] as const;
+    for (let index = career.projectRecommendations.length; index < 7; index += 1) {
+      const primary = skillNames[index % skillNames.length];
+      const secondary = skillNames[(index + 1) % skillNames.length];
+      const title = `${career.title} ${projectTemplates[index][0]}`;
+      if (existingTitles.has(title)) continue;
+      const project = await prisma.projectRecommendation.create({ data: { careerId: career.id, title, description: `Build a ${career.title.toLowerCase()} portfolio project focused on ${primary} and ${secondary}. Apply the concepts in a realistic workflow, document trade-offs, and demonstrate the result with tests or an evidence-based walkthrough.`, difficulty: projectTemplates[index][1] } });
+      for (const skillName of [primary, secondary]) {
+        const skillId = skillMap.get(skillName);
+        if (skillId) await prisma.projectSkill.create({ data: { projectId: project.id, skillId } });
+      }
+    }
   }
 
   console.log(`✅ Seeded all ${careersData.length} baseline careers successfully.`);

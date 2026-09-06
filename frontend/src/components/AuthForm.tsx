@@ -54,10 +54,10 @@ export default function AuthForm({ mode, onNavigate }: AuthFormProps) {
         <section className="grid w-full max-w-5xl overflow-hidden rounded-[30px] border border-white/10 bg-[#0b1220]/85 shadow-[0_30px_100px_rgba(15,23,42,0.6)] backdrop-blur-xl lg:grid-cols-[1.08fr_0.92fr]">
           <div className="hidden bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.22),transparent_35%),linear-gradient(135deg,#101c36,#0a1222_60%,#050b16)] p-10 text-white lg:flex lg:flex-col lg:justify-between">
             <div>
-              <div className="mb-16 flex items-center gap-3 text-sky-200">
+              <button type="button" onClick={() => onNavigate('/')} className="mb-16 flex items-center gap-3 rounded-lg text-left text-sky-200 transition hover:text-white focus:outline-none focus:ring-2 focus:ring-sky-300/70 focus:ring-offset-2 focus:ring-offset-[#101c36]">
                 <Compass className="h-8 w-8" />
                 <span className="text-lg font-semibold tracking-tight">AI Career Guide</span>
-              </div>
+              </button>
               <p className="mb-5 text-xs font-bold uppercase tracking-[0.22em] text-sky-300">A clearer next step</p>
               <h1 className="max-w-md text-5xl font-semibold leading-[1.05] text-white">Build a career path that feels like yours.</h1>
               <p className="mt-6 max-w-md text-lg leading-8 text-sky-100/75">
@@ -68,10 +68,10 @@ export default function AuthForm({ mode, onNavigate }: AuthFormProps) {
           </div>
 
           <div className="p-6 sm:p-10 lg:p-12">
-            <div className="mb-10 flex items-center gap-3 text-sky-300 lg:hidden">
+            <button type="button" onClick={() => onNavigate('/')} className="mb-10 flex items-center gap-3 rounded-lg text-left text-sky-300 transition hover:text-white focus:outline-none focus:ring-2 focus:ring-sky-300/70 focus:ring-offset-2 focus:ring-offset-[#0b1220] lg:hidden">
               <Compass className="h-7 w-7" />
               <span className="text-lg font-semibold tracking-tight">AI Career Guide</span>
-            </div>
+            </button>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-300">
               {isRegister ? 'Create your account' : 'Welcome back'}
             </p>

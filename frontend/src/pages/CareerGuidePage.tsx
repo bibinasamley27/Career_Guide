@@ -270,7 +270,7 @@ export default function CareerGuidePage({ careerId, onNavigate }: CareerGuidePag
 
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
         <div className="rounded-[28px] border border-slate-700/70 bg-[#0b1220]/80 p-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Resources</p>
+          <div className="flex items-center justify-between gap-3"><p className="text-xs uppercase tracking-[0.2em] text-slate-400">Resources</p><button type="button" onClick={() => onNavigate(`/resources/${result.career.id}`)} className="text-xs font-semibold text-cyan-300 hover:text-cyan-200">Open library</button></div>
           <div className="mt-5 space-y-3">
             {result.resources.map((resource) => (
               <a
@@ -293,7 +293,7 @@ export default function CareerGuidePage({ careerId, onNavigate }: CareerGuidePag
         </div>
 
         <div className="rounded-[28px] border border-slate-700/70 bg-[#0b1220]/80 p-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Project ideas</p>
+          <div className="flex items-center justify-between gap-3"><p className="text-xs uppercase tracking-[0.2em] text-slate-400">Project ideas</p><button type="button" onClick={() => onNavigate(`/projects/${result.career.id}`)} className="text-xs font-semibold text-cyan-300 hover:text-cyan-200">Open workspace</button></div>
           <div className="mt-5 space-y-4">
             {result.projects.map((project) => (
               <div key={project.id} className="rounded-2xl border border-white/10 bg-[#0d1728]/60 p-4">

@@ -38,6 +38,8 @@ export default function App() {
   if (user) {
     const skillGapMatch = path.match(/^\/skill-gap\/([^/]+)$/);
     const careerGuideMatch = path.match(/^\/career-guide\/([^/]+)$/);
+    const resourcesMatch = path.match(/^\/resources\/([^/]+)$/);
+    const projectsMatch = path.match(/^\/projects\/([^/]+)$/);
     return (
       <AuthenticatedShell onNavigate={navigate}>
         {path === '/profile' ? <ProfilePage /> :
@@ -47,10 +49,12 @@ export default function App() {
          path === '/career-guide-ai' ? <AssistantPage /> :
          path === '/skill-gap' ? <SkillGapHubPage onNavigate={navigate} /> :
          path === '/roadmap' ? <CareerGuidePage onNavigate={navigate} /> :
-         path === '/resources' ? <WorkspacePage type="resources" title="Resources" description="Keep useful learning material close while you build toward your next career move." /> :
-         path === '/projects' ? <WorkspacePage type="projects" title="Projects" description="Turn your skills into practical work that gives your career direction and momentum." /> :
+         path === '/resources' ? <WorkspacePage type="resources" title="Resources" description="Learning material selected for your current career direction." /> :
+         path === '/projects' ? <WorkspacePage type="projects" title="Projects" description="Build practical projects that strengthen the skills required for your target career." /> :
          skillGapMatch ? <SkillGapPage careerId={skillGapMatch[1]} onNavigate={navigate} /> :
          careerGuideMatch ? <CareerGuidePage careerId={careerGuideMatch[1]} onNavigate={navigate} /> :
+         resourcesMatch ? <WorkspacePage careerId={resourcesMatch[1]} type="resources" title="Resources" description="Learning material selected for your current career direction." /> :
+         projectsMatch ? <WorkspacePage careerId={projectsMatch[1]} type="projects" title="Projects" description="Build practical projects that strengthen the skills required for your target career." /> :
          <StudentDashboardPage onNavigate={navigate} />}
       </AuthenticatedShell>
     );

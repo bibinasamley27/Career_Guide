@@ -3,6 +3,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { app } from './index';
 import prisma from './lib/prisma';
 import { formatCareerContent } from './services/careerContentService';
+import { getPersonalizedCareerContent } from './services/careerContentService';
 
 const email = `content-test-${Date.now()}@example.com`;
 const password = 'SecurePass123';
@@ -56,5 +57,20 @@ describe('career resources and projects', () => {
     } as never);
     expect(content.resources).toEqual([]);
     expect(content.projects).toEqual([]);
+  });
+
+  it('ranks content against the authenticated user skill gaps', async () => {
+    const user = await prisma.user.findUniqueOrThrow({ where: { email } });
+    const career = await prisma.career.findUniqueOrThrow({ where: { id: careerId }, include: { careerSkills: { include: { skill: true } } } });
+    const firstSkill = career.careerSkills[0];
+    await prisma.userSkill.create({ data: { userId: user.id, skillId: firstSkill.skillId, proficiency: 'ADVANCED' } });
+
+    const result = await getPersonalizedCareerContent(user.id, careerId);
+    expect(result.gaps).not.toContain(firstSkill.skill.name);
+    expect(result.resources.length).toBeGreaterThanOrEqual(7);
+    expect(result.projects.length).toBeGreaterThanOrEqual(7);
+    expect(result.resources.some((resource) => resource.skills.length > 0)).toBe(true);
+    expect(result.projects.some((project) => project.skills.length > 0)).toBe(true);
+    expect(result.resources[0].relevanceReason).toBeTruthy();
   });
 });

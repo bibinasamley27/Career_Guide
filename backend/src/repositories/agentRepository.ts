@@ -29,3 +29,12 @@ export const findAgentCareer = (careerId: string) =>
       projectRecommendations: { orderBy: { title: 'asc' } },
     },
   });
+
+export const findCareersByQuery = (terms: string[]) => prisma.career.findMany({
+  where: {
+    OR: terms.flatMap((term) => [{ title: { contains: term, mode: 'insensitive' as const } }, { domain: { contains: term, mode: 'insensitive' as const } }]),
+  },
+  select: { id: true, title: true, domain: true, description: true },
+  orderBy: { title: 'asc' },
+  take: 10,
+});

@@ -1,8 +1,20 @@
 import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
 import { z } from 'zod';
 
-// Load environment variables from .env file
-dotenv.config();
+const loadEnvFile = (filePath: string) => {
+  if (!fs.existsSync(filePath)) return;
+  const values = dotenv.parse(fs.readFileSync(filePath));
+  for (const [key, value] of Object.entries(values)) {
+    if (!process.env[key] && value) process.env[key] = value;
+  }
+};
+
+loadEnvFile(path.resolve(process.cwd(), '.env'));
+loadEnvFile(path.resolve(process.cwd(), '../.env'));
+loadEnvFile(path.resolve(__dirname, '../../../.env'));
+loadEnvFile(path.resolve(process.cwd(), 'backend/.env'));
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
@@ -11,7 +23,7 @@ const envSchema = z.object({
   DATABASE_URL: z.string().optional(),
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
   GEMINI_API_KEY: z.string().optional(),
-  GEMINI_MODEL: z.string().default('gemini-2.5-flash'),
+  GEMINI_MODEL: z.string().default('gemini-3.6-flash'),
   AI_MAX_AGENT_STEPS: z.coerce.number().int().positive().default(8),
   AI_MAX_MESSAGE_LENGTH: z.coerce.number().int().positive().default(2000),
   AI_MAX_HISTORY_MESSAGES: z.coerce.number().int().positive().default(20),

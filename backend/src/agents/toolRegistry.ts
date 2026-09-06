@@ -7,15 +7,19 @@ import { generateRoadmap } from '../tools/roadmapTool';
 import { getCareerContent } from '../services/careerContentService';
 import { getCareerRecommendations } from '../services/careerMatchingService';
 import { getSavedCareerList } from '../services/savedCareerService';
-import { findAgentCareer } from '../repositories/agentRepository';
+import { getLatestAssessment } from '../services/assessmentService';
+import { findAgentCareer, findCareersByQuery } from '../repositories/agentRepository';
 import { ValidationError } from '../middleware/errorHandler';
 
 const careerIdArgs = z.object({ careerId: z.string().uuid() }).strict();
+const careerSearchArgs = z.object({ query: z.string().trim().min(1).max(120) }).strict();
 const noArgs = z.object({}).strict();
 
 const declarations: AiToolDeclaration[] = [
   { name: 'get_user_profile', description: 'Get the authenticated student profile, skills, interests, and latest assessment.', parameters: { type: 'object', properties: {} } },
+  { name: 'get_assessment', description: 'Get the authenticated student latest assessment answers and submission time.', parameters: { type: 'object', properties: {} } },
   { name: 'get_career_recommendations', description: 'Run the deterministic career recommendation engine for the authenticated student.', parameters: { type: 'object', properties: {} } },
+  { name: 'find_careers', description: 'Find canonical careers by title or domain before requesting details for named careers.', parameters: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] } },
   { name: 'get_career_details', description: 'Get requirements, interests, resources, and projects for a career.', parameters: { type: 'object', properties: { careerId: { type: 'string', format: 'uuid' } }, required: ['careerId'] } },
   { name: 'get_skill_gap', description: 'Get the authoritative skill gap for the authenticated student and a career.', parameters: { type: 'object', properties: { careerId: { type: 'string', format: 'uuid' } }, required: ['careerId'] } },
   { name: 'get_roadmap', description: 'Generate the existing deterministic personalized roadmap for a career.', parameters: { type: 'object', properties: { careerId: { type: 'string', format: 'uuid' } }, required: ['careerId'] } },
@@ -43,7 +47,14 @@ const requireCareer = async (careerId: string) => {
 export const createToolRegistry = (userId: string) => {
   const handlers: Record<string, (args: unknown) => Promise<unknown>> = {
     get_user_profile: async (args) => { noArgs.parse(args); return profileTool(userId); },
+    get_assessment: async (args) => { noArgs.parse(args); return getLatestAssessment(userId); },
     get_career_recommendations: async (args) => { noArgs.parse(args); return getCareerRecommendations(userId); },
+    find_careers: async (args) => {
+      const { query } = careerSearchArgs.parse(args);
+      const terms = query.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+      const careers = await findCareersByQuery(terms);
+      return careers.map((career) => ({ id: career.id, name: career.title, domain: career.domain, description: career.description }));
+    },
     get_career_details: async (args) => safeCareer(await requireCareer(careerIdArgs.parse(args).careerId)),
     get_skill_gap: async (args) => skillGapTool(userId, careerIdArgs.parse(args).careerId),
     get_roadmap: async (args) => {

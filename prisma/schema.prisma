@@ -146,6 +146,8 @@ model Skill {
   userSkills    UserSkill[]
   careerSkills  CareerSkill[]
   roadmapSkills RoadmapSkill[]
+  resourceSkills ResourceSkill[]
+  projectSkills ProjectSkill[]
 
   @@map("skills")
 }
@@ -235,8 +237,23 @@ model Resource {
   updatedAt       DateTime         @updatedAt
 
   careerResources CareerResource[]
+  skills          ResourceSkill[]
 
   @@map("resources")
+}
+
+model ResourceSkill {
+  id         String   @id @default(uuid())
+  resourceId String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  skillId    String
+  skill      Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([resourceId, skillId])
+  @@index([resourceId])
+  @@index([skillId])
+  @@map("resource_skills")
 }
 
 model CareerResource {
@@ -324,10 +341,25 @@ model ProjectRecommendation {
   difficulty     SkillProficiency @default(BEGINNER)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
+  skills         ProjectSkill[]
 
   @@index([careerId])
   @@index([roadmapStageId])
   @@map("project_recommendations")
+}
+
+model ProjectSkill {
+  id        String                @id @default(uuid())
+  projectId String
+  project   ProjectRecommendation @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  skillId   String
+  skill     Skill                 @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  createdAt DateTime              @default(now())
+
+  @@unique([projectId, skillId])
+  @@index([projectId])
+  @@index([skillId])
+  @@map("project_skills")
 }
 
 model SavedCareer {

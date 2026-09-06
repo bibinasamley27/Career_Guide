@@ -112,6 +112,28 @@ export interface SkillGapResult {
   prioritySkills: PrioritySkill[];
 }
 
+export interface CareerResource {
+  id: string;
+  title: string;
+  type: string;
+  url: string | null;
+  provider: string;
+  level: string;
+  relevance: string | null;
+  skills: string[];
+  relevanceReason: string;
+}
+
+export interface CareerProject {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: string;
+  skills: string[];
+  expectedOutcome: string;
+  relevanceReason: string;
+}
+
 export interface RoadmapStage {
   stageNumber: number;
   title: string;
@@ -224,6 +246,8 @@ export const careerApi = {
   save: (careerId: string) => request<SavedCareer>(`/careers/${careerId}/save`, { method: 'POST' }),
   unsave: (careerId: string) => request<{ message: string }>(`/careers/${careerId}/save`, { method: 'DELETE' }),
   saved: () => request<{ savedCareers: SavedCareer[] }>('/careers/saved'),
+  resources: (careerId: string) => request<{ careerId: string; careerName: string; gaps: string[]; resources: CareerResource[] }>(`/careers/${careerId}/resources`),
+  projects: (careerId: string) => request<{ careerId: string; careerName: string; gaps: string[]; projects: CareerProject[] }>(`/careers/${careerId}/projects`),
 };
 
 export const agentApi = {

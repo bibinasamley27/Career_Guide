@@ -7,16 +7,34 @@ const toGeminiTools = (tools: AiToolDeclaration[]) => [{ functionDeclarations: t
 export class GeminiProvider implements AiProvider {
   private readonly client: GoogleGenAI;
 
-  constructor(apiKey = config.GEMINI_API_KEY) {
+  constructor(apiKey = config.GEMINI_API_KEY, client?: GoogleGenAI) {
     if (!apiKey) throw new Error('Gemini is not configured');
-    this.client = new GoogleGenAI({ apiKey });
+    this.client = client || new GoogleGenAI({ apiKey });
   }
 
   async generate(input: { systemInstruction: string; messages: AssistantMessage[]; tools: AiToolDeclaration[] }): Promise<AiGenerationResult> {
+    console.info('[CareerAssistant] Gemini request started', {
+      model: config.GEMINI_MODEL,
+      messageCount: input.messages.length,
+      toolCount: input.tools.length,
+    });
     const response = await Promise.race([
       this.client.models.generateContent({
         model: config.GEMINI_MODEL,
-        contents: input.messages.map((message) => ({ role: message.role === 'assistant' ? 'model' : 'user', parts: [{ text: message.content }] })),
+        contents: input.messages.map((message) => ({
+          role: message.role === 'assistant' ? 'model' : 'user',
+          parts: [
+            ...(message.content ? [{ text: message.content }] : []),
+            ...(message.toolCalls || []).map((call) => ({ functionCall: { id: call.id, name: call.name, args: call.arguments } })),
+            ...(message.toolResults || []).map((toolResult) => ({
+              functionResponse: {
+                id: toolResult.id,
+                name: toolResult.name,
+                response: toolResult.error ? { error: toolResult.error } : { output: toolResult.result },
+              },
+            })),
+          ],
+        })),
         config: {
           systemInstruction: input.systemInstruction,
           tools: toGeminiTools(input.tools),
@@ -26,8 +44,9 @@ export class GeminiProvider implements AiProvider {
     ]);
 
     const parts = response.candidates?.[0]?.content?.parts || [];
-    const toolCalls = parts.flatMap((part) => part.functionCall ? [{ name: part.functionCall.name || '', arguments: (part.functionCall.args || {}) as Record<string, unknown> }] : []);
+    const toolCalls = parts.flatMap((part) => part.functionCall ? [{ id: part.functionCall.id, name: part.functionCall.name || '', arguments: (part.functionCall.args || {}) as Record<string, unknown> }] : []);
     const text = parts.filter((part) => part.text).map((part) => part.text).join('\n').trim();
+    console.info('[CareerAssistant] Gemini response received', { hasText: Boolean(text), toolCallCount: toolCalls.length });
     return { text: text || undefined, toolCalls };
   }
 }
