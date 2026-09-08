@@ -158,6 +158,32 @@ export interface CareerGuideResult {
   agentStatus: 'completed';
 }
 
+export interface ResumeParsedData {
+  personalSummary?: string | null;
+  education?: Array<{ degree?: string | null; institution?: string | null; field?: string | null; startYear?: number | null; endYear?: number | null }>;
+  experience?: Array<{ role?: string | null; organization?: string | null; duration?: string | null; description?: string | null; technologies?: string[] }>;
+  skills?: string[];
+  projects?: Array<{ title?: string | null; description?: string | null; technologies?: string[]; role?: string | null }>;
+  certifications?: string[];
+  achievements?: string[];
+  interests?: string[];
+  languages?: string[];
+  extractedKeywords?: string[];
+}
+
+export interface ResumeRecord {
+  id: string;
+  userId: string;
+  originalFileName: string;
+  fileType: string;
+  fileSize: number;
+  extractedText: string;
+  parsedData: ResumeParsedData;
+  analysisStatus: 'UPLOADED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AssistantResponse {
   conversationId: string;
   message: { role: 'assistant'; content: string };
@@ -248,6 +274,25 @@ export const careerApi = {
   saved: () => request<{ savedCareers: SavedCareer[] }>('/careers/saved'),
   resources: (careerId: string) => request<{ careerId: string; careerName: string; gaps: string[]; resources: CareerResource[] }>(`/careers/${careerId}/resources`),
   projects: (careerId: string) => request<{ careerId: string; careerName: string; gaps: string[]; projects: CareerProject[] }>(`/careers/${careerId}/projects`),
+};
+
+export const resumeApi = {
+  upload: (file: File) => {
+    const form = new FormData();
+    form.append('file', file);
+    return fetch('/api/resume/upload', { method: 'POST', credentials: 'include', body: form })
+      .then(async (response) => {
+        const payload = (await response.json().catch(() => null)) as ApiResponse<{ analysisStatus: string; resume: ResumeRecord }> | null;
+        if (!response.ok) {
+          throw new ApiError(payload?.error?.message || 'Resume upload failed', response.status);
+        }
+        return payload!.data;
+      });
+  },
+  getLatest: () => request<{ resume: ResumeRecord | null }>('/resume'),
+  getById: (resumeId: string) => request<{ resume: ResumeRecord | null }>(`/resume/${resumeId}`),
+  delete: (resumeId: string) => request<{ message: string }>(`/resume/${resumeId}`, { method: 'DELETE' }),
+  update: (resumeId: string, data: Partial<ResumeParsedData>) => request<{ resume: ResumeRecord }>(`/resume/${resumeId}`, { method: 'PUT', body: JSON.stringify(data) }),
 };
 
 export const agentApi = {

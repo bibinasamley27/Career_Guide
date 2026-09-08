@@ -9,6 +9,7 @@ export default function StudentDashboardPage({ onNavigate }: Props) {
   const [matches, setMatches] = useState<CareerRecommendation[]>([]);
   const [saved, setSaved] = useState<SavedCareer[]>([]);
   const [assessmentDone, setAssessmentDone] = useState(false);
+  const [resumeStatus, setResumeStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,6 +23,17 @@ export default function StudentDashboardPage({ onNavigate }: Props) {
       })
       .catch((loadError) => setError(loadError instanceof Error ? loadError.message : 'Unable to load your dashboard.'))
       .finally(() => setLoading(false));
+
+    fetch('/api/resume', { credentials: 'include' })
+      .then(async (response) => {
+        if (!response.ok) {
+          setResumeStatus(null);
+          return;
+        }
+        const payload = await response.json();
+        setResumeStatus(payload.data?.resume ? 'Resume analyzed' : null);
+      })
+      .catch((loadError) => setError(loadError instanceof Error ? loadError.message : 'Unable to load your dashboard.'));
   }, []);
 
   if (loading) {
@@ -106,6 +118,15 @@ export default function StudentDashboardPage({ onNavigate }: Props) {
 
       <div className="grid gap-6 xl:grid-cols-[1.4fr_0.82fr]">
         <section className="rounded-[28px] border border-white/10 bg-[#0b1220]/80 p-6 shadow-[0_12px_48px_rgba(15,23,42,0.25)]">
+          <div className="mb-6 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-300">Resume Status</p>
+                <h3 className="mt-2 text-2xl font-bold text-white">{resumeStatus ? '✓ Resume analyzed' : 'Upload your resume to get a career roadmap based on your current experience.'}</h3>
+              </div>
+              <button type="button" onClick={() => onNavigate('/resume-analyzer')} className="premium-button-secondary">{resumeStatus ? 'View Resume' : 'Analyze My Resume'}</button>
+            </div>
+          </div>
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Next best step</p>

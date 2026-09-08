@@ -11,6 +11,7 @@ import careerGuideRoutes from './routes/careerGuide';
 import careerContentRoutes from './routes/careerContent';
 import savedCareerRoutes from './routes/savedCareer';
 import assistantRoutes from './routes/assistant';
+import resumeRoutes from './routes/resume';
 import { errorHandler, NotFoundError } from './middleware/errorHandler';
 
 const app = express();
@@ -34,6 +35,7 @@ app.use('/api/agent', careerGuideRoutes);
 app.use('/api/careers', careerContentRoutes);
 app.use('/api/careers', savedCareerRoutes);
 app.use('/api/assistant', assistantRoutes);
+app.use('/api/resume', resumeRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

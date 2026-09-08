@@ -30,6 +30,7 @@ export default function AuthenticatedShell({ children, onNavigate }: Authenticat
     ['/profile', 'Profile', UserRound],
     ['/assessment', 'Assessment', ClipboardList],
     ['/recommendations', 'Career Matches', Target],
+    ['/resume-analyzer', 'Resume Analyzer', FileText],
     ['/skill-gap', 'Skill Gap', Compass],
     ['/career-guide-ai', '✨ Career Guide AI', Sparkles],
     ['/roadmap', 'Roadmap', FileText],

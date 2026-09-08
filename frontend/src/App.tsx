@@ -13,6 +13,7 @@ import SavedCareersPage from './pages/SavedCareersPage';
 import LandingPage from './pages/LandingPage';
 import AssistantPage from './pages/AssistantPage';
 import WorkspacePage from './pages/WorkspacePage';
+import ResumeAnalyzerPage from './pages/ResumeAnalyzerPage';
 import { useAuthStore } from './state/auth';
 
 export default function App() {
@@ -46,6 +47,7 @@ export default function App() {
          path === '/assessment' ? <AssessmentPage /> :
          path === '/recommendations' ? <RecommendationsPage onNavigate={navigate} /> :
          path === '/saved' ? <SavedCareersPage onNavigate={navigate} /> :
+         path === '/resume-analyzer' ? <ResumeAnalyzerPage onNavigate={navigate} /> :
          path === '/career-guide-ai' ? <AssistantPage /> :
          path === '/skill-gap' ? <SkillGapHubPage onNavigate={navigate} /> :
          path === '/roadmap' ? <CareerGuidePage onNavigate={navigate} /> :

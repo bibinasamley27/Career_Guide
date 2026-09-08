@@ -58,6 +58,13 @@ enum AgentRunStatus {
   FAILED
 }
 
+enum ResumeAnalysisStatus {
+  UPLOADED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
 // ==========================================
 // USER & PROFILE MODELS
 // ==========================================
@@ -78,8 +85,27 @@ model User {
   roadmaps     Roadmap[]
   progress     Progress[]
   agentRuns    AgentRun[]
+  resumes      Resume[]
 
   @@map("users")
+}
+
+model Resume {
+  id               String               @id @default(uuid())
+  userId           String
+  user             User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  originalFileName String
+  fileType         String
+  fileSize         Int
+  extractedText    String               @db.Text
+  parsedData       Json
+  analysisStatus   ResumeAnalysisStatus @default(UPLOADED)
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  @@index([userId])
+  @@index([analysisStatus])
+  @@map("resumes")
 }
 
 model Profile {
