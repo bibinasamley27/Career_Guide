@@ -140,19 +140,21 @@ export default function ProfilePage(_props: ProfilePageProps) {
   };
 
   if (isLoading) {
-    return <section className="mx-auto flex max-w-6xl items-center gap-3 px-6 py-16 text-slate-300"><Loader2 className="h-5 w-5 animate-spin text-sky-300" />Loading your profile...</section>;
+    return <section className="mx-auto flex max-w-6xl items-center gap-3 px-6 py-16 text-[#b8b3a8]"><Loader2 className="h-5 w-5 animate-spin text-[#c9a96e]" />Loading your profile...</section>;
   }
 
   return (
     <section className="mx-auto max-w-6xl px-2 py-6 sm:px-4">
-      <div className="max-w-3xl">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-300">Profile</p>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight text-white">Give your career journey some context.</h1>
-        <p className="mt-4 text-lg leading-8 text-slate-300">This information helps shape more accurate career guidance, skill comparisons, and next steps.</p>
+      <div className="editorial-panel rounded-[30px] p-6 sm:p-8">
+        <div className="max-w-3xl">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#c9a96e]">Profile</p>
+          <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#f2efe7]">Give your career journey some context.</h1>
+          <p className="mt-4 text-lg leading-8 text-[#b8b3a8]">This information helps shape more accurate career guidance, skill comparisons, and next steps.</p>
+        </div>
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        <section className="rounded-[24px] border border-white/10 bg-[#0b1220]/80 p-6 shadow-[0_12px_40px_rgba(15,23,42,0.2)]">
+        <section className="editorial-panel rounded-[24px] p-6">
           <h2 className="text-xl font-semibold text-white">Personal details</h2>
           <div className="mt-5 space-y-4">
             <label className="block text-sm text-slate-300">Name<input value={form.name} onChange={(event) => updateField('name', event.target.value)} className="premium-input mt-2" /></label>
@@ -161,7 +163,7 @@ export default function ProfilePage(_props: ProfilePageProps) {
           </div>
         </section>
 
-        <section className="rounded-[24px] border border-white/10 bg-[#0b1220]/80 p-6 shadow-[0_12px_40px_rgba(15,23,42,0.2)]">
+        <section className="editorial-panel rounded-[24px] p-6">
           <h2 className="text-xl font-semibold text-white">Experience and learning</h2>
           <div className="mt-5 space-y-4">
             <label className="block text-sm text-slate-300">Experience level<select value={form.experienceLevel} onChange={(event) => updateField('experienceLevel', event.target.value)} className="premium-input mt-2">{experienceOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
@@ -170,18 +172,18 @@ export default function ProfilePage(_props: ProfilePageProps) {
           </div>
         </section>
 
-        <section className="rounded-[24px] border border-white/10 bg-[#0b1220]/80 p-6 shadow-[0_12px_40px_rgba(15,23,42,0.2)] lg:col-span-2">
+        <section className="editorial-panel rounded-[24px] p-6 lg:col-span-2">
           <h2 className="text-xl font-semibold text-white">Interests</h2>
           <p className="mt-2 text-sm text-slate-400">Choose the topics that capture your attention and the level of intensity you want to invest.</p>
           <div className="mt-5 flex flex-wrap gap-2">
             {interests.map((interest) => {
               const selected = selectedInterests[interest.id] !== undefined;
               return (
-                <button type="button" key={interest.id} onClick={() => toggleInterest(interest.id)} className={`flex items-center gap-2 rounded-full border px-3 py-2 text-sm transition ${selected ? 'border-sky-300/50 bg-sky-400/10 text-sky-100' : 'border-white/10 bg-[#0d1728]/70 text-slate-300 hover:border-sky-400/40 hover:text-white'}`}>
+                <button type="button" key={interest.id} onClick={() => toggleInterest(interest.id)} className={`flex items-center gap-2 rounded-full border px-3 py-2 text-sm transition ${selected ? 'border-[#c9a96e]/50 bg-[#c9a96e]/10 text-[#f2efe7]' : 'border-white/10 bg-[#22211d]/80 text-[#d9d4c8] hover:border-[#c9a96e]/40 hover:text-[#f2efe7]'}`}>
                   {selected && <Check className="h-4 w-4" />}
                   {interest.name}
                   {selected && (
-                    <select aria-label={`${interest.name} strength`} value={selectedInterests[interest.id]} onClick={(event) => event.stopPropagation()} onChange={(event) => setSelectedInterests((current) => ({ ...current, [interest.id]: Number(event.target.value) }))} className="ml-1 rounded-md border border-white/10 bg-[#091421] px-1 py-0.5 text-xs text-sky-100 outline-none">
+                    <select aria-label={`${interest.name} strength`} value={selectedInterests[interest.id]} onClick={(event) => event.stopPropagation()} onChange={(event) => setSelectedInterests((current) => ({ ...current, [interest.id]: Number(event.target.value) }))} className="ml-1 rounded-md border border-white/10 bg-[#0d0d0c] px-1 py-0.5 text-xs text-[#f2efe7] outline-none">
                       {[1, 2, 3, 4, 5].map((value) => <option key={value} value={value}>{value}</option>)}
                     </select>
                   )}
@@ -191,7 +193,7 @@ export default function ProfilePage(_props: ProfilePageProps) {
           </div>
         </section>
 
-        <section className="rounded-[24px] border border-white/10 bg-[#0b1220]/80 p-6 shadow-[0_12px_40px_rgba(15,23,42,0.2)] lg:col-span-2">
+        <section className="editorial-panel rounded-[24px] p-6 lg:col-span-2">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold text-white">Skills</h2>
@@ -207,13 +209,13 @@ export default function ProfilePage(_props: ProfilePageProps) {
             {filteredSkills.map((skill) => {
               const selected = selectedSkills[skill.id] !== undefined;
               return (
-                <div key={skill.id} className={`flex items-center justify-between gap-2 rounded-xl border p-3 ${selected ? 'border-sky-300/50 bg-sky-400/10' : 'border-white/10 bg-[#0d1728]/60'}`}>
+                <div key={skill.id} className={`flex items-center justify-between gap-2 rounded-xl border p-3 ${selected ? 'border-[#c9a96e]/50 bg-[#c9a96e]/10' : 'border-white/10 bg-[#22211d]/80'}`}>
                   <button type="button" onClick={() => toggleSkill(skill.id)} className="min-w-0 text-left">
-                    <span className={`block truncate text-sm ${selected ? 'text-sky-100' : 'text-slate-200'}`}>{skill.name}</span>
-                    <span className="text-xs text-slate-400">{skill.category}</span>
+                    <span className={`block truncate text-sm ${selected ? 'text-[#f2efe7]' : 'text-[#f2efe7]'}`}>{skill.name}</span>
+                    <span className="text-xs text-[#b8b3a8]">{skill.category}</span>
                   </button>
                   {selected && (
-                    <select aria-label={`${skill.name} proficiency`} value={selectedSkills[skill.id]} onChange={(event) => setSelectedSkills((current) => ({ ...current, [skill.id]: event.target.value as Proficiency }))} className="w-28 rounded-lg border border-white/10 bg-[#091421] p-1.5 text-xs text-slate-200 outline-none">
+                    <select aria-label={`${skill.name} proficiency`} value={selectedSkills[skill.id]} onChange={(event) => setSelectedSkills((current) => ({ ...current, [skill.id]: event.target.value as Proficiency }))} className="w-28 rounded-lg border border-white/10 bg-[#0d0d0c] p-1.5 text-xs text-[#f2efe7] outline-none">
                       {(['BEGINNER', 'INTERMEDIATE', 'ADVANCED'] as Proficiency[]).map((level) => <option key={level} value={level}>{level.toLowerCase()}</option>)}
                     </select>
                   )}
@@ -223,7 +225,7 @@ export default function ProfilePage(_props: ProfilePageProps) {
           </div>
         </section>
 
-        <section className="rounded-[24px] border border-white/10 bg-[#0b1220]/80 p-6 shadow-[0_12px_40px_rgba(15,23,42,0.2)] lg:col-span-2">
+        <section className="editorial-panel rounded-[24px] p-6 lg:col-span-2">
           <h2 className="text-xl font-semibold text-white">Direction</h2>
           <div className="mt-5 grid gap-4 lg:grid-cols-2">
             <label className="block text-sm text-slate-300">Preferred domains<span className="mt-2 block text-xs text-slate-500">Separate domains with commas.</span><input value={form.preferredDomains} onChange={(event) => updateField('preferredDomains', event.target.value)} className="premium-input mt-2" placeholder="Software Engineering, Data Science" /></label>

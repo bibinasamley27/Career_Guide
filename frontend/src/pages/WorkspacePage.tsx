@@ -67,19 +67,19 @@ export default function WorkspacePage({ title, description, type, careerId: requ
   return (
     <section className="mx-auto max-w-6xl px-2 py-6 sm:px-4">
       <div className="flex items-start gap-4">
-        <div className="rounded-2xl border border-sky-400/30 bg-sky-500/10 p-3 text-sky-300">
+        <div className="rounded-2xl border border-[#c9a96e]/30 bg-[#c9a96e]/10 p-3 text-[#c9a96e]">
           <Icon className="h-6 w-6" />
         </div>
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-300">Career workspace</p>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-white">{title}</h1>
-          <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-300">{description}</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#c9a96e]">Career workspace</p>
+          <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#f2efe7]">{title}</h1>
+          <p className="mt-4 max-w-2xl text-lg leading-8 text-[#b8b3a8]">{description}</p>
         </div>
       </div>
       {loading ? (
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
           {[1, 2, 3, 4].map((item) => <div key={item} className="h-48 animate-pulse rounded-[24px] border border-white/10 bg-white/[0.03]" />)}
-          <p className="col-span-full flex items-center gap-2 text-sm text-slate-400"><Loader2 className="h-4 w-4 animate-spin text-sky-300" />Loading your {type}...</p>
+          <p className="col-span-full flex items-center gap-2 text-sm text-[#b8b3a8]"><Loader2 className="h-4 w-4 animate-spin text-[#c9a96e]" />Loading your {type}...</p>
         </div>
       ) : error ? (
         <div className="mt-10 rounded-[24px] border border-rose-400/30 bg-rose-500/10 p-6">
@@ -87,15 +87,15 @@ export default function WorkspacePage({ title, description, type, careerId: requ
           <button type="button" onClick={() => void load()} className="premium-button-secondary mt-5"><RefreshCw className="h-4 w-4" />Try again</button>
         </div>
       ) : !career ? (
-        <div className="mt-10 rounded-[24px] border border-dashed border-white/10 bg-[#0b1220]/70 p-8 text-slate-300">
-          <p className="text-lg font-semibold text-white">Choose a career direction first.</p>
-          <p className="mt-2 text-sm text-slate-400">Complete your profile and assessment to generate career matches before exploring {type}.</p>
+        <div className="mt-10 rounded-[24px] border border-dashed border-white/10 bg-[#1b1a17]/80 p-8 text-[#b8b3a8]">
+          <p className="text-lg font-semibold text-[#f2efe7]">Choose a career direction first.</p>
+          <p className="mt-2 text-sm text-[#b8b3a8]">Complete your profile and assessment to generate career matches before exploring {type}.</p>
         </div>
       ) : (
         <>
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border border-sky-400/20 bg-sky-500/10 p-4">
-            <div className="flex items-center gap-3"><Target className="h-5 w-5 text-sky-300" /><div><p className="text-xs uppercase tracking-[0.16em] text-sky-300">Current career direction</p><p className="mt-1 text-lg font-semibold text-white">{career.name}</p></div></div>
-            {gaps.length > 0 && <div className="text-sm text-slate-300"><span className="text-slate-500">Recommended for your gaps:</span> {gaps.join(', ')}</div>}
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border border-[#c9a96e]/20 bg-[#c9a96e]/10 p-4">
+            <div className="flex items-center gap-3"><Target className="h-5 w-5 text-[#c9a96e]" /><div><p className="text-xs uppercase tracking-[0.16em] text-[#c9a96e]">Current career direction</p><p className="mt-1 text-lg font-semibold text-[#f2efe7]">{career.name}</p></div></div>
+            {gaps.length > 0 && <div className="text-sm text-[#b8b3a8]"><span className="text-[#8d8679]">Recommended for your gaps:</span> {gaps.join(', ')}</div>}
           </div>
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -104,9 +104,9 @@ export default function WorkspacePage({ title, description, type, careerId: requ
           </div>
 
           {type === 'resources' ? (
-            visibleResources.length ? <div className="mt-6 grid gap-5 md:grid-cols-2">{visibleResources.map((resource) => <article key={resource.id} className="rounded-[24px] border border-white/10 bg-[#0b1220]/80 p-5 transition hover:-translate-y-1 hover:border-sky-300/40"><div className="flex items-start justify-between gap-3"><span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-cyan-200">{resource.type.replace(/_/g, ' ')}</span><span className="text-xs uppercase tracking-[0.12em] text-slate-500">{resource.level.replace(/_/g, ' ')}</span></div><h2 className="mt-5 text-xl font-semibold text-white">{resource.title}</h2><p className="mt-3 text-sm leading-6 text-slate-300">{resource.relevanceReason}</p>{resource.skills.length > 0 && <div className="mt-4 flex flex-wrap gap-2">{resource.skills.map((skill) => <span key={skill} className="rounded-full border border-sky-300/20 bg-sky-300/10 px-2 py-1 text-xs text-sky-200">{skill}</span>)}</div>}<div className="mt-5 flex items-center justify-between gap-3 border-t border-white/10 pt-4"><span className="text-xs uppercase tracking-[0.12em] text-slate-500">{resource.provider}</span>{resource.url ? <a href={resource.url} target="_blank" rel="noreferrer" className="premium-button-secondary">Open resource <ExternalLink className="h-4 w-4" /></a> : <span className="text-xs text-slate-500">No external link</span>}</div></article>)}</div> : <div className="mt-6 rounded-[24px] border border-dashed border-white/10 p-8 text-slate-400">Resources aren't available for this career yet.</div>
+            visibleResources.length ? <div className="mt-6 grid gap-5 md:grid-cols-2">{visibleResources.map((resource) => <article key={resource.id} className="rounded-[24px] border border-white/10 bg-[#22211d]/80 p-5 transition hover:-translate-y-1 hover:border-[#c9a96e]/40"><div className="flex items-start justify-between gap-3"><span className="rounded-full border border-[#c9a96e]/20 bg-[#c9a96e]/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#e3d7b8]">{resource.type.replace(/_/g, ' ')}</span><span className="text-xs uppercase tracking-[0.12em] text-[#8d8679]">{resource.level.replace(/_/g, ' ')}</span></div><h2 className="mt-5 text-xl font-semibold text-[#f2efe7]">{resource.title}</h2><p className="mt-3 text-sm leading-6 text-[#b8b3a8]">{resource.relevanceReason}</p>{resource.skills.length > 0 && <div className="mt-4 flex flex-wrap gap-2">{resource.skills.map((skill) => <span key={skill} className="rounded-full border border-[#c9a96e]/20 bg-[#c9a96e]/10 px-2 py-1 text-xs text-[#e3d7b8]">{skill}</span>)}</div>}<div className="mt-5 flex items-center justify-between gap-3 border-t border-white/10 pt-4"><span className="text-xs uppercase tracking-[0.12em] text-[#8d8679]">{resource.provider}</span>{resource.url ? <a href={resource.url} target="_blank" rel="noreferrer" className="premium-button-secondary">Open resource <ExternalLink className="h-4 w-4" /></a> : <span className="text-xs text-[#8d8679]">No external link</span>}</div></article>)}</div> : <div className="mt-6 rounded-[24px] border border-dashed border-white/10 p-8 text-[#b8b3a8]">Resources aren't available for this career yet.</div>
           ) : (
-            visibleProjects.length ? <div className="mt-6 grid gap-5 md:grid-cols-2">{visibleProjects.map((project) => { const matchedGaps = project.skills.filter((skill) => gaps.includes(skill)); return <article key={project.id} className="rounded-[24px] border border-white/10 bg-[#0b1220]/80 p-5 transition hover:-translate-y-1 hover:border-sky-300/40"><div className="flex items-start justify-between gap-3"><span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-amber-200">{project.difficulty.toLowerCase()}</span><FolderGit2 className="h-5 w-5 text-sky-300" /></div><h2 className="mt-5 text-xl font-semibold text-white">{project.title}</h2><p className="mt-3 text-sm leading-6 text-slate-300">{project.description}</p>{project.skills.length > 0 && <div className="mt-5 flex flex-wrap gap-2">{project.skills.map((skill) => <span key={skill} className="rounded-full border border-sky-300/20 bg-sky-300/10 px-2.5 py-1 text-xs text-sky-200">{skill}</span>)}</div>}<div className="mt-5 border-t border-white/10 pt-4"><p className="text-xs uppercase tracking-[0.12em] text-slate-500">Why this fits</p><p className="mt-2 text-sm text-slate-300">{project.relevanceReason}</p><p className="mt-3 text-xs uppercase tracking-[0.12em] text-slate-500">Expected outcome</p><p className="mt-2 text-sm text-slate-300">{project.expectedOutcome}</p>{matchedGaps.length > 0 && <p className="mt-3 text-xs text-amber-200">Supports current gaps: {matchedGaps.join(', ')}</p>}</div></article>; })}</div> : <div className="mt-6 rounded-[24px] border border-dashed border-white/10 p-8 text-slate-400">No projects are currently available for this career.</div>
+            visibleProjects.length ? <div className="mt-6 grid gap-5 md:grid-cols-2">{visibleProjects.map((project) => { const matchedGaps = project.skills.filter((skill) => gaps.includes(skill)); return <article key={project.id} className="rounded-[24px] border border-white/10 bg-[#22211d]/80 p-5 transition hover:-translate-y-1 hover:border-[#c9a96e]/40"><div className="flex items-start justify-between gap-3"><span className="rounded-full border border-[#d7be85]/20 bg-[#d7be85]/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#e9d4a4]">{project.difficulty.toLowerCase()}</span><FolderGit2 className="h-5 w-5 text-[#c9a96e]" /></div><h2 className="mt-5 text-xl font-semibold text-[#f2efe7]">{project.title}</h2><p className="mt-3 text-sm leading-6 text-[#b8b3a8]">{project.description}</p>{project.skills.length > 0 && <div className="mt-5 flex flex-wrap gap-2">{project.skills.map((skill) => <span key={skill} className="rounded-full border border-[#c9a96e]/20 bg-[#c9a96e]/10 px-2.5 py-1 text-xs text-[#e3d7b8]">{skill}</span>)}</div>}<div className="mt-5 border-t border-white/10 pt-4"><p className="text-xs uppercase tracking-[0.12em] text-[#8d8679]">Why this fits</p><p className="mt-2 text-sm text-[#b8b3a8]">{project.relevanceReason}</p><p className="mt-3 text-xs uppercase tracking-[0.12em] text-[#8d8679]">Expected outcome</p><p className="mt-2 text-sm text-[#b8b3a8]">{project.expectedOutcome}</p>{matchedGaps.length > 0 && <p className="mt-3 text-xs text-[#d7be85]">Supports current gaps: {matchedGaps.join(', ')}</p>}</div></article>; })}</div> : <div className="mt-6 rounded-[24px] border border-dashed border-white/10 p-8 text-[#b8b3a8]">No projects are currently available for this career.</div>
           )}
         </>
       )}

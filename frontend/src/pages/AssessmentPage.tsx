@@ -89,7 +89,7 @@ export default function AssessmentPage() {
   };
 
   if (isLoading) {
-    return <section className="mx-auto flex max-w-6xl items-center gap-3 px-6 py-16 text-slate-300"><Loader2 className="h-5 w-5 animate-spin text-sky-300" />Loading your assessment...</section>;
+    return <section className="mx-auto flex max-w-6xl items-center gap-3 px-6 py-16 text-[#b8b3a8]"><Loader2 className="h-5 w-5 animate-spin text-[#c9a96e]" />Loading your assessment...</section>;
   }
 
   if (!currentQuestion && !isReview) {
@@ -98,30 +98,32 @@ export default function AssessmentPage() {
 
   return (
     <section className="mx-auto max-w-4xl px-2 py-6 sm:px-4">
-      <div className="flex items-start gap-4">
-        <div className="rounded-2xl border border-sky-400/30 bg-sky-500/10 p-3 text-sky-300"><ClipboardList className="h-6 w-6" /></div>
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-300">Career assessment</p>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-white">What kind of work pulls you forward?</h1>
-          <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-300">Seven quick reflections help us calibrate future guidance. There are no wrong answers.</p>
+      <div className="editorial-panel overflow-hidden rounded-[30px] p-6 sm:p-8">
+        <div className="flex items-start gap-4">
+          <div className="rounded-2xl border border-[#c9a96e]/30 bg-[#c9a96e]/10 p-3 text-[#c9a96e]"><ClipboardList className="h-6 w-6" /></div>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#c9a96e]">Career assessment</p>
+            <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#f2efe7]">What kind of work pulls you forward?</h1>
+            <p className="mt-4 max-w-2xl text-lg leading-8 text-[#b8b3a8]">Seven quick reflections help us calibrate future guidance. There are no wrong answers.</p>
+          </div>
         </div>
       </div>
 
-      <div className="mt-8 rounded-[28px] border border-white/10 bg-[#0b1220]/80 p-6 shadow-[0_12px_40px_rgba(15,23,42,0.2)] sm:p-8">
-        <div className="flex items-center justify-between text-sm text-slate-400"><span>{isReview ? 'Review your answers' : `Question ${currentStep + 1} of ${questions.length}`}</span><span>{isReview ? 'Ready to submit' : `${Math.round(((currentStep + 1) / questions.length) * 100)}%`}</span></div>
-        <div className="mt-3 h-2.5 rounded-full bg-slate-800"><div className="h-2.5 rounded-full bg-gradient-to-r from-sky-400 to-indigo-500 transition-all" style={{ width: `${isReview ? 100 : ((currentStep + 1) / questions.length) * 100}%` }} /></div>
+      <div className="mt-8 rounded-[28px] border border-white/10 bg-[#1b1a17]/80 p-6 shadow-[0_12px_40px_rgba(0,0,0,0.18)] sm:p-8">
+        <div className="flex items-center justify-between text-sm text-[#b8b3a8]"><span>{isReview ? 'Review your answers' : `Question ${currentStep + 1} of ${questions.length}`}</span><span>{isReview ? 'Ready to submit' : `${Math.round(((currentStep + 1) / questions.length) * 100)}%`}</span></div>
+        <div className="mt-3 h-2.5 rounded-full bg-[#2a2723]"><div className="h-2.5 rounded-full bg-gradient-to-r from-[#d8c19a] to-[#c9a96e] transition-all" style={{ width: `${isReview ? 100 : ((currentStep + 1) / questions.length) * 100}%` }} /></div>
 
         {!isReview && currentQuestion && (
           <div className="mt-10">
-            <h2 className="text-2xl font-semibold text-white">{currentQuestion.question}</h2>
-            <p className="mt-3 text-slate-400">{currentQuestion.description}</p>
+            <h2 className="text-2xl font-semibold text-[#f2efe7]">{currentQuestion.question}</h2>
+            <p className="mt-3 text-[#b8b3a8]">{currentQuestion.description}</p>
             <div className="mt-7 grid gap-3">
               {currentQuestion.options.map((option) => {
                 const selected = currentQuestion.type === 'multiple' ? Array.isArray(currentAnswer) && currentAnswer.includes(option.value) : currentQuestion.type === 'rating' ? currentAnswer === Number(option.value) : currentAnswer === option.value;
                 return (
-                  <button type="button" key={option.value} onClick={() => currentQuestion.type === 'multiple' ? toggleMultiple(currentQuestion, option.value) : currentQuestion.type === 'rating' ? chooseSingle(currentQuestion, Number(option.value)) : chooseSingle(currentQuestion, option.value)} className={`flex items-center justify-between rounded-2xl border p-4 text-left transition ${selected ? 'border-sky-300/50 bg-sky-400/10 text-sky-100' : 'border-white/10 bg-[#0d1728]/60 text-slate-200 hover:border-sky-300/30'}`}>
+                  <button type="button" key={option.value} onClick={() => currentQuestion.type === 'multiple' ? toggleMultiple(currentQuestion, option.value) : currentQuestion.type === 'rating' ? chooseSingle(currentQuestion, Number(option.value)) : chooseSingle(currentQuestion, option.value)} className={`flex items-center justify-between rounded-2xl border p-4 text-left transition ${selected ? 'border-[#c9a96e]/50 bg-[#c9a96e]/10 text-[#f2efe7]' : 'border-white/10 bg-[#22211d]/80 text-[#f2efe7] hover:border-[#c9a96e]/30'}`}>
                     <span>{option.label}</span>
-                    {selected && <Check className="h-5 w-5 text-sky-300" />}
+                    {selected && <Check className="h-5 w-5 text-[#c9a96e]" />}
                   </button>
                 );
               })}
@@ -131,16 +133,16 @@ export default function AssessmentPage() {
 
         {isReview && (
           <div className="mt-10">
-            <h2 className="text-2xl font-semibold text-white">Assessment complete</h2>
-            <p className="mt-3 text-slate-400">Review your answers before submitting. You can go back and adjust any response.</p>
+            <h2 className="text-2xl font-semibold text-[#f2efe7]">Assessment complete</h2>
+            <p className="mt-3 text-[#b8b3a8]">Review your answers before submitting. You can go back and adjust any response.</p>
             <div className="mt-7 space-y-3">
               {questions.map((question) => {
                 const answer = answers[question.id as keyof AssessmentAnswers];
                 const labels = Array.isArray(answer) ? answer.map((value) => question.options.find((option) => option.value === value)?.label || value).join(', ') : question.options.find((option) => option.value === String(answer))?.label || String(answer);
                 return (
-                  <div key={question.id} className="rounded-2xl border border-white/10 bg-[#091421] p-4">
-                    <p className="text-sm text-slate-400">{question.question}</p>
-                    <p className="mt-1 text-slate-100">{labels}</p>
+                  <div key={question.id} className="rounded-2xl border border-white/10 bg-[#0d0d0c] p-4">
+                    <p className="text-sm text-[#b8b3a8]">{question.question}</p>
+                    <p className="mt-1 text-[#f2efe7]">{labels}</p>
                   </div>
                 );
               })}

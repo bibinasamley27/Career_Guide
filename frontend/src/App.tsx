@@ -33,7 +33,7 @@ export default function App() {
   };
 
   if (!initialized || isLoading) {
-    return <div className="flex min-h-screen items-center justify-center bg-[#101b2d] text-sm text-slate-400">Loading your workspace...</div>;
+    return <div className="flex min-h-screen items-center justify-center bg-[#0d0d0c] text-sm text-[#b8b3a8]">Loading your workspace...</div>;
   }
 
   if (user) {

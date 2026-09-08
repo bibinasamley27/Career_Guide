@@ -49,45 +49,45 @@ export default function AuthForm({ mode, onNavigate }: AuthFormProps) {
   };
 
   return (
-    <main className="min-h-screen bg-[#07111f] px-4 py-8 text-slate-100 sm:px-6 sm:py-12">
+    <main className="min-h-screen bg-[#0d0d0c] px-4 py-8 text-[#f2efe7] sm:px-6 sm:py-12">
       <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-6xl items-center justify-center">
-        <section className="grid w-full max-w-5xl overflow-hidden rounded-[30px] border border-white/10 bg-[#0b1220]/85 shadow-[0_30px_100px_rgba(15,23,42,0.6)] backdrop-blur-xl lg:grid-cols-[1.08fr_0.92fr]">
-          <div className="hidden bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.22),transparent_35%),linear-gradient(135deg,#101c36,#0a1222_60%,#050b16)] p-10 text-white lg:flex lg:flex-col lg:justify-between">
+        <section className="grid w-full max-w-5xl overflow-hidden rounded-[30px] border border-white/10 bg-[#1b1a17]/90 shadow-[0_30px_100px_rgba(0,0,0,0.28)] backdrop-blur-xl lg:grid-cols-[1.08fr_0.92fr]">
+          <div className="hidden bg-[radial-gradient(circle_at_top,_rgba(201,169,110,0.14),transparent_26%),linear-gradient(135deg,#1b1a17,#171511_60%,#0d0d0c)] p-10 text-[#f2efe7] lg:flex lg:flex-col lg:justify-between">
             <div>
-              <button type="button" onClick={() => onNavigate('/')} className="mb-16 flex items-center gap-3 rounded-lg text-left text-sky-200 transition hover:text-white focus:outline-none focus:ring-2 focus:ring-sky-300/70 focus:ring-offset-2 focus:ring-offset-[#101c36]">
+              <button type="button" onClick={() => onNavigate('/')} className="mb-16 flex items-center gap-3 rounded-lg text-left text-[#f2efe7] transition hover:text-[#d8c19a] focus:outline-none focus:ring-2 focus:ring-[#c9a96e]/60 focus:ring-offset-2 focus:ring-offset-[#1b1a17]">
                 <Compass className="h-8 w-8" />
                 <span className="text-lg font-semibold tracking-tight">AI Career Guide</span>
               </button>
-              <p className="mb-5 text-xs font-bold uppercase tracking-[0.22em] text-sky-300">A clearer next step</p>
-              <h1 className="max-w-md text-5xl font-semibold leading-[1.05] text-white">Build a career path that feels like yours.</h1>
-              <p className="mt-6 max-w-md text-lg leading-8 text-sky-100/75">
+              <p className="mb-5 text-xs font-bold uppercase tracking-[0.22em] text-[#c9a96e]">A clearer next step</p>
+              <h1 className="max-w-md text-5xl font-semibold leading-[1.05] text-[#f2efe7]">Build a career path that feels like yours.</h1>
+              <p className="mt-6 max-w-md text-lg leading-8 text-[#d7d0c5]">
                 Save your profile and return to grounded guidance as your skills grow.
               </p>
             </div>
-            <p className="text-sm text-slate-400">Your account is the private starting point for the journey.</p>
+            <p className="text-sm text-[#b8b3a8]">Your account is the private starting point for the journey.</p>
           </div>
 
           <div className="p-6 sm:p-10 lg:p-12">
-            <button type="button" onClick={() => onNavigate('/')} className="mb-10 flex items-center gap-3 rounded-lg text-left text-sky-300 transition hover:text-white focus:outline-none focus:ring-2 focus:ring-sky-300/70 focus:ring-offset-2 focus:ring-offset-[#0b1220] lg:hidden">
+            <button type="button" onClick={() => onNavigate('/')} className="mb-10 flex items-center gap-3 rounded-lg text-left text-[#c9a96e] transition hover:text-[#d8c19a] focus:outline-none focus:ring-2 focus:ring-[#c9a96e]/60 focus:ring-offset-2 focus:ring-offset-[#0d0d0c] lg:hidden">
               <Compass className="h-7 w-7" />
               <span className="text-lg font-semibold tracking-tight">AI Career Guide</span>
             </button>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-300">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#c9a96e]">
               {isRegister ? 'Create your account' : 'Welcome back'}
             </p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white">
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#f2efe7]">
               {isRegister ? 'Start with a strong foundation.' : 'Continue your career work.'}
             </h2>
-            <p className="mt-3 text-slate-400">
+            <p className="mt-3 text-[#b8b3a8]">
               {isRegister ? 'Your profile will be ready for the next step.' : 'Sign in to pick up where you left off.'}
             </p>
 
             <form className="mt-8 space-y-5" onSubmit={submit} noValidate>
               {isRegister && (
-                <label className="block text-sm font-medium text-slate-200">
+                <label className="block text-sm font-medium text-[#f2efe7]">
                   Name
                   <div className="relative mt-2">
-                    <UserRound className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                    <UserRound className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#b8b3a8]" />
                     <input
                       value={name}
                       onChange={(event) => setName(event.target.value)}
@@ -99,10 +99,10 @@ export default function AuthForm({ mode, onNavigate }: AuthFormProps) {
                 </label>
               )}
 
-              <label className="block text-sm font-medium text-slate-200">
+              <label className="block text-sm font-medium text-[#f2efe7]">
                 Email
                 <div className="relative mt-2">
-                  <Mail className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                  <Mail className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#b8b3a8]" />
                   <input
                     type="email"
                     value={email}
@@ -114,10 +114,10 @@ export default function AuthForm({ mode, onNavigate }: AuthFormProps) {
                 </div>
               </label>
 
-              <label className="block text-sm font-medium text-slate-200">
+              <label className="block text-sm font-medium text-[#f2efe7]">
                 Password
                 <div className="relative mt-2">
-                  <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                  <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#b8b3a8]" />
                   <input
                     type="password"
                     value={password}
@@ -130,10 +130,10 @@ export default function AuthForm({ mode, onNavigate }: AuthFormProps) {
               </label>
 
               {isRegister && (
-                <label className="block text-sm font-medium text-slate-200">
+                <label className="block text-sm font-medium text-[#f2efe7]">
                   Confirm password
                   <div className="relative mt-2">
-                    <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                    <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#b8b3a8]" />
                     <input
                       type="password"
                       value={confirmPassword}
@@ -146,7 +146,7 @@ export default function AuthForm({ mode, onNavigate }: AuthFormProps) {
                 </label>
               )}
 
-              {isRegister && <p className="text-xs text-slate-400">Password policy: {passwordHint}.</p>}
+              {isRegister && <p className="text-xs text-[#b8b3a8]">Password policy: {passwordHint}.</p>}
               {formError && <p role="alert" className="rounded-xl border border-rose-400/30 bg-rose-500/10 p-3 text-sm text-rose-200">{formError}</p>}
 
               <button type="submit" disabled={isLoading} className="premium-button w-full justify-center">
@@ -154,9 +154,9 @@ export default function AuthForm({ mode, onNavigate }: AuthFormProps) {
               </button>
             </form>
 
-            <p className="mt-8 text-center text-sm text-slate-400">
+            <p className="mt-8 text-center text-sm text-[#b8b3a8]">
               {isRegister ? 'Already have an account?' : 'New to AI Career Guide?'}{' '}
-              <button type="button" onClick={() => onNavigate(isRegister ? '/login' : '/register')} className="font-semibold text-sky-300 transition hover:text-sky-200">
+              <button type="button" onClick={() => onNavigate(isRegister ? '/login' : '/register')} className="font-semibold text-[#c9a96e] transition hover:text-[#d8c19a]">
                 {isRegister ? 'Sign in' : 'Create an account'}
               </button>
             </p>
