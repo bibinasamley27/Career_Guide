@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { del, getById, getLatest, update, upload } from '../controllers/resumeController';
+import { del, getById, getLatest, getRoadmap, update, upload } from '../controllers/resumeController';
 import { requireAuth } from '../middleware/auth';
 import { AppError, ValidationError } from '../middleware/errorHandler';
 
@@ -34,6 +34,7 @@ router.post('/upload', (req, res, next) => {
     upload(req, res, next);
   });
 });
+router.get('/roadmap', getRoadmap);
 router.get('/', getLatest);
 router.get('/:resumeId', getById);
 router.put('/:resumeId', update);

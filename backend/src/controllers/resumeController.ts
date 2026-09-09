@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ValidationError } from '../middleware/errorHandler';
-import { CreateResumeUpload, getResumeSummaryForUser, getResumeByIdForUser, removeResumeForUser, updateResumeForUser, validateResumeUpload } from '../services/resumeService';
+import { CreateResumeUpload, getResumeSummaryForUser, getResumeByIdForUser, removeResumeForUser, updateResumeForUser, validateResumeUpload, getResumeRoadmapForUser } from '../services/resumeService';
 
 const requireUserId = (req: Request) => {
   if (!req.authUserId) throw new ValidationError('Authenticated user is missing');
@@ -20,6 +20,15 @@ export const upload = async (req: Request, res: Response, next: NextFunction): P
 export const getLatest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const data = await getResumeSummaryForUser(requireUserId(req));
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getRoadmap = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const data = await getResumeRoadmapForUser(requireUserId(req));
     res.status(200).json({ success: true, data });
   } catch (error) {
     next(error);

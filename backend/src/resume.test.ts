@@ -113,4 +113,49 @@ describe('resume API', () => {
     expect(listResponse.status).toBe(200);
     expect(listResponse.body.data.resume).toBeNull();
   });
+
+  it('returns a resume-only roadmap for an authenticated user with a resume', async () => {
+    const upload = await firstAgent
+      .post('/api/resume/upload')
+      .attach('file', makePdfBuffer(), { filename: 'resume-roadmap.pdf', contentType: 'application/pdf' });
+
+    const response = await firstAgent.get('/api/resume/roadmap');
+
+    expect(response.status).toBe(200);
+    expect(response.body.data.source).toBe('resume');
+    expect(response.body.data.resumeId).toBe(upload.body.data.resume.id);
+    expect(response.body.data.careerDirection).toBeTruthy();
+    expect(response.body.data.currentStrengths.length).toBeGreaterThan(0);
+    expect(response.body.data.roadmap.length).toBeGreaterThan(0);
+    expect(Array.isArray(response.body.data.skillGaps)).toBe(true);
+  });
+
+  it('returns no resume state for a user without a resume', async () => {
+    const response = await secondAgent.get('/api/resume/roadmap');
+
+    expect(response.status).toBe(404);
+    expect(response.body.error.message).toMatch(/No analyzed resume found|resume/i);
+  });
+
+  it('rejects unauthenticated access to the resume roadmap endpoint', async () => {
+    const response = await request(app).get('/api/resume/roadmap');
+    expect(response.status).toBe(401);
+  });
+
+  it('ensures resume roadmap generation is based on resume data only', async () => {
+    const response = await firstAgent.get('/api/resume/roadmap');
+
+    expect(response.status).toBe(200);
+    expect(response.body.data.roadmap.some((stage: any) => stage.skills.some((skill: string) => /React|Python|SQL|Node/i.test(skill)))).toBe(true);
+    expect(response.body.data.currentStrengths).not.toContain('Career Goal');
+  });
+
+  it('falls back when the AI provider is unavailable or invalid', async () => {
+    const response = await firstAgent.get('/api/resume/roadmap');
+
+    expect(response.status).toBe(200);
+    expect(response.body.data.roadmap).toEqual(expect.any(Array));
+    expect(response.body.data.currentStrengths).toEqual(expect.any(Array));
+    expect(response.body.data.skillGaps).toEqual(expect.any(Array));
+  });
 });

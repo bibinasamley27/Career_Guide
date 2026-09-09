@@ -136,10 +136,10 @@ export default function ResumeAnalyzerPage({ onNavigate }: ResumeAnalyzerPagePro
   };
 
   const handleBuildRoadmap = () => {
-    if (!selectedCareer || isGeneratingRoadmap) return;
+    if (isGeneratingRoadmap) return;
     setIsGeneratingRoadmap(true);
     setError(null);
-    onNavigate(`/career-guide/${selectedCareer.id}`);
+    onNavigate('/resume-roadmap');
   };
 
   if (loading) {

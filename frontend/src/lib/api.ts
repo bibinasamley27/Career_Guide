@@ -184,6 +184,35 @@ export interface ResumeRecord {
   updatedAt: string;
 }
 
+export interface ResumeRoadmapStage {
+  stageNumber: number;
+  title: string;
+  objective: string;
+  skills: string[];
+  topics: string[];
+  estimatedDuration: string;
+  practice: string;
+  project: string;
+  completionCriteria: string;
+  whyThisComesNext?: string;
+}
+
+export interface ResumeRoadmapSkillGap {
+  name: string;
+  status: 'ALREADY_HAVE' | 'BUILD_NEXT' | 'MISSING_DEVELOP';
+  priority?: 'HIGH' | 'MEDIUM' | 'LOW';
+  reason?: string;
+}
+
+export interface ResumeRoadmapResult {
+  source: 'resume';
+  resumeId: string;
+  careerDirection: string;
+  currentStrengths: string[];
+  skillGaps: ResumeRoadmapSkillGap[];
+  roadmap: ResumeRoadmapStage[];
+}
+
 export interface AssistantResponse {
   conversationId: string;
   message: { role: 'assistant'; content: string };
@@ -293,6 +322,10 @@ export const resumeApi = {
   getById: (resumeId: string) => request<{ resume: ResumeRecord | null }>(`/resume/${resumeId}`),
   delete: (resumeId: string) => request<{ message: string }>(`/resume/${resumeId}`, { method: 'DELETE' }),
   update: (resumeId: string, data: Partial<ResumeParsedData>) => request<{ resume: ResumeRecord }>(`/resume/${resumeId}`, { method: 'PUT', body: JSON.stringify(data) }),
+};
+
+export const resumeRoadmapApi = {
+  generate: () => request<ResumeRoadmapResult>('/resume/roadmap'),
 };
 
 export const agentApi = {

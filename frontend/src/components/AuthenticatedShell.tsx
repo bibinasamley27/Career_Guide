@@ -35,6 +35,7 @@ export default function AuthenticatedShell({ children, onNavigate }: Authenticat
     ['/profile', 'Profile', UserRound],
     ['/assessment', 'Assessment', ClipboardList],
     ['/resume-analyzer', 'Resume Analyzer', FileText],
+    ['/resume-roadmap', 'Resume Roadmap', FolderGit2],
     ['/skill-gap', 'Skill Gap', Compass],
     ['/roadmap', 'Roadmap', FolderGit2],
   ] as const;
